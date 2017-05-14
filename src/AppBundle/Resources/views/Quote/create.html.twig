@@ -1,0 +1,93 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Courier Calc - Create Quote{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Create New Quote</h4>
+                </div>
+                <div class="content">
+
+                    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+                    {{ form_start(form) }}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.start) }}
+                            {{ form_row(form.destination) }}
+
+                            <a id="toggleVia">Add Via Point <i class="fa fa-plus"></i></a>
+
+                            <div id="via">
+                                {{ form_row(form.via) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            {{ form_rest(form) }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-info btn-fill pull-right">Calculate</button>
+                    <div class="clearfix"></div>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+    {% block javascripts %}
+
+        {{ parent() }}
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqACoKPqvIrZ1EQp-njyExDg0oYaG_64o&libraries=places"></script>
+
+        <script type="text/javascript">
+            var startInput = document.getElementById('quote_start');
+            var destinationInput = document.getElementById('quote_destination');
+            var viaInput = document.getElementById('quote_via');
+
+            startAutocomplete = new google.maps.places.Autocomplete(startInput);
+            destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
+            viaAutocomplete = new google.maps.places.Autocomplete(viaInput);
+
+            startAutocomplete.addListener('place_changed', function(){
+                var startLocation =  startAutocomplete.getPlace();
+                var startLat = startLocation.geometry.location.lat();
+                var startlon = startLocation.geometry.location.lng();
+            });
+
+            destinationAutocomplete.addListener('place_changed', function(){
+                var finishLocation =  destinationAutocomplete.getPlace();
+                var finishLat = finishLocation.geometry.location.lat();
+                var finishlon = finishLocation.geometry.location.lng();
+            });
+
+            viaAutocomplete.addListener('place_changed', function(){
+                var viaLocation =  viaAutocomplete.getPlace();
+                var viaLat = viaLocation.geometry.location.lat();
+                var vialon = finishLocation.geometry.location.lng();
+            });
+        </script>
+
+
+        <script>
+            $(document).ready(function(){
+                //toggle via input
+                $("#toggleVia").click(function(){
+                    var via = $("#via");
+                    if (via.hasClass('hidden')){
+                        via.removeClass('hidden');
+                    } else {
+                        via.addClass('hidden');
+                    }
+                });
+            })
+        </script>
+{% endblock %}
