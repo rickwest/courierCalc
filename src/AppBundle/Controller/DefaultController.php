@@ -14,4 +14,11 @@ class DefaultController extends Controller
     public function indexAction(Request $request) {
         return $this->render('default/index.html.twig');
     }
+
+    /**
+     * @Route("/dashboard", name="dashboard")
+     */
+    public function dashboardAction(Request $request) {
+        return $this->render('default/dashboard.html.twig');
+    }
 }

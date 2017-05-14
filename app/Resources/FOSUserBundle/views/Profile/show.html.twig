@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Your Profile</h4>
+                    <p class="category"></p>
+                </div>
+                <div class="content">
+                    {% include "@FOSUser/Profile/show_content.html.twig" %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

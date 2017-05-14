@@ -34,6 +34,9 @@ framework:
     php_errors:
         log: true
 
+    # For FOS User
+    translator: ~
+
 # Twig Configuration
 twig:
     debug: '%kernel.debug%'

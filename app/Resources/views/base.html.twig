@@ -5,18 +5,53 @@
 
         <title>{% block title %}Courier Calc - Quotation for Couriers{% endblock %}</title>
 
-        {% block stylesheets %}{% endblock %}
-
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+        {# generic stylesheets #}
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
+
+        {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('assets/admin/css/animate.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/admin/css/demo.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/admin/css/light-bootstrap-dashboard.css') }}">
+        {% endblock %}
 
         <!--     Fonts and icons     -->
         <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css'>
-        <link href="assets/landing/css/pe-icon-7-stroke.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="{{ asset('assets/css/pe-icon-7-stroke.css') }}">
 
     </head>
+
+    {% block body %}
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <div class="wrapper">
+            {% include ':default/Partials:sidebar.html.twig' %}
+            <div class="main-panel">
+                {% include ':default/Partials:nav.html.twig' %}
+                <div class="content">
+                    <div class="container-fluid">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+                {% include ':default/Partials:footer.html.twig' %}
+            </div>
+        </div>
     </body>
+    {% endblock %}
+
+    {# generic javascipts#}
+    <script src="{{ asset('assets/js/jquery-1.10.2.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.js') }}"></script>
+
+    {% block javascripts %}
+    <script src="{{ asset('assets/admin/js/bootstrap-checkbox-radio-switch.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/bootstrap-notify.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/bootstrap-select.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/chartist.min.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/light-bootstrap-dashboard.js') }}"></script>
+    <script src="{{ asset('assets/admin/js/demo.js') }}"></script>
+    {% endblock %}
+
 </html>

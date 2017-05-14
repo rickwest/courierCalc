@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('assets/login/css/login.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <body>
+
+{% if app.request.hasPreviousSession %}
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+    <nav class="navbar navbar-transparent navbar-absolute">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path('homepage') }}">Courier Calc</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{{ path('fos_user_registration_register') }}">
+                            Don't have an account yet?
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="wrapper wrapper-full-page">
+        <div class="full-page login-page" data-color="gray" data-image="{{ asset('assets/img/van-on-road.jpg') }}">
+            <div class="full-page-background" style="background-image: url('{{ asset('assets/img/van-on-road.jpg') }}')"></div>
+            <!--   you can change the color of the filter page using: data-color="blue | azure | green | orange | red | purple" -->
+            <div class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
+                            {% block fos_user_content %}
+                            {% endblock fos_user_content %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="footer footer-transparent">
+                <div class="container">
+                    <nav class="pull-left">
+                        <ul>
+                            <li>
+                                <a href="{{ path('homepage') }}">
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('fos_user_security_login') }}">
+                                    Login
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('fos_user_registration_register') }}">
+                                    Register
+                                </a>
+                            </li>
+                            <li>
+                                <a href="mailto:hello@couriercal.com">
+                                    Contact
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <p class="copyright pull-right">
+                        &copy;{{ 'now' | date('Y') }} <a href="{{ path('homepage') }}">Courier Calc</a> A smoother journey <i class="fa fa-car"></i>
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+{% endblock %}
