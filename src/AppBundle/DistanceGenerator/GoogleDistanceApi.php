@@ -9,6 +9,7 @@
 namespace AppBundle\DistanceGenerator;
 
 
+use AppBundle\Entity\Location;
 use GuzzleHttp\Client;
 
 class GoogleDistanceApi {
@@ -19,13 +20,19 @@ class GoogleDistanceApi {
 		$this->googleApiKey = $googleApiKey;
 	}
 
-	public function getDirections($origin, $destination, $wayPoints=null) {
+	public function getDirections($origin, $destination, $wayPoints = null) {
+
+		if (!empty($wayPoints)) {
+			// in the future we need to build a string
+			// to handle multiple waypoints
+			$wayPoints = $wayPoints->getName();
+		}
 
 		$client = new Client();
 
 		$url  = 'https://maps.googleapis.com/maps/api/directions/json?';
-		$url .= 'origin=' . $origin;
-		$url .= '&destination=' . $destination;
+		$url .= 'origin=' . $origin->getName();
+		$url .= '&destination=' . $destination->getName();
 		$url .= '&waypoints=' . $wayPoints;
 		$url .= '&units=imperial';
 		$url .= '&mode=driving';
@@ -42,7 +49,7 @@ class GoogleDistanceApi {
 
 	}
 
-	public function getRouteDetails($origin, $destination, $wayPoints=null) {
+	public function getRouteDetails($origin, $destination, $wayPoints = null) {
 		//make our API call
 		$directions = $this->getDirections($origin, $destination, $wayPoints);
 		// there should always only be one route but we are passed an array.

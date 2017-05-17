@@ -5,16 +5,22 @@
             <img src="{{ asset('assets/img/logo.png') }}" class="img-responsive">
         </div>
         <ul class="nav">
+            <li class="active">
+                <a href="{{ path('createQuote') }}">
+                    <i class="pe-7s-plus"></i>
+                    <p>Create New Quote</p>
+                </a>
+            </li>
             <li>
-                <a href="{{ url('dashboard') }}">
+                <a href="{{ path('dashboard') }}">
                     <i class="pe-7s-graph"></i>
                     <p>Dashboard</p>
                 </a>
             </li>
             <li>
-                <a href="">
+                <a href="{{ path('quotes') }}">
                     <i class="pe-7s-calculator"></i>
-                    <p>Quote</p>
+                    <p>Quotes</p>
                 </a>
             </li>
         </ul>

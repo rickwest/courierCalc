@@ -1,7 +1,151 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}AppBundle:Quote:show{% endblock %}
+{% block title %}Courier Calc - Quote{% endblock %}
 
-{% block body %}
-<h1>Welcome to the Quote:show page</h1>
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="header">
+                    <h4 class="title">Customer Charge</h4>
+                    <p class="category">The price your customer pays</p>
+                </div>
+                <div class="content">
+                    <p class="h1">&pound;{{ quote.price | number_format(2) }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="header">
+                    <h4 class="title">Driver Pay</h4>
+                    <p class="category">How much your driver will be paid</p>
+                </div>
+                <div class="content">
+                    <p class="h1"> &pound;{{ quote.cost | number_format(2) }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="header">
+                    <h4 class="title">Margin</h4>
+                    <p class="category">Gross Profit Margin</p>
+                </div>
+                <div class="content">
+                    <p class="h1"> {{ (((quote.price - quote.cost) / quote.price) * 100) | number_format(2) }}&percnt;</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Journey Summary</h4>
+                    <p class="category">This quote has been calculated based on these details</p>
+                </div>
+                <div class="content">
+                    <p><strong>Start:</strong> {{ quote.start.name }} </p>
+                    <p><strong>Destination:</strong> {{ quote.destination.name }}</p>
+                    <p><strong>Via:</strong>{% if quote.via.name is defined %}{{ quote.via.name }}{% endif %}</p>
+                    <p><strong>Total Distance:</strong> {{ quote.distance }} miles</p>
+                    <p><strong>Estimated Time:</strong> {{ quote.duration }}</p>
+                    <p><strong>Fee Scale:</strong> {{ feeScale.name }}</p>
+                    <p><strong>Vehicle Type:</strong> {{ vehicleType }}</p>
+                    <a href="" role="button" class="btn btn-info btn-fill">Edit</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Map</h4>
+                    <p class="category">Because sometimes its nice to look at something pretty!</p>
+                </div>
+                <div class="content">
+                    <div id="map" style="width:100%;height:400px"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#<div class="row">#}
+        {#<div class="col-md-7">#}
+            {#<div class="card">#}
+                {#<div class="header">#}
+                    {#<h4 class="title">Fees</h4>#}
+                    {#<p class="category"></p>#}
+                {#</div>#}
+                {#<div class="content">#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
+        {#<div class="col-md-5">#}
+            {#<div class="card">#}
+                {#<div class="header">#}
+                    {#<h4 class="title">Email Quote</h4>#}
+                    {#<p class="category">Email quote to customer</p>#}
+                {#</div>#}
+                {#<div class="content">#}
+                    {#<form id="emailQuote" action="/quote/email">#}
+                        {#<div class="form-group">#}
+                            {#<label>Email Address</label>#}
+                            {#<div class="input-group">#}
+                                {#<span class="input-group-addon"><i class="fa fa-envelope"></i></span>#}
+                                {#<input type="email" class="form-control" placeholder="Enter customer email..." name="email" id="email">#}
+                            {#</div>#}
+                        {#</div>#}
+                        {#<button type="submit" class="btn btn-info btn-fill">Send</button>#}
+                    {#</form>#}
+                {#</div>#}
+            {#</div>#}
+        {#</div>#}
+    {#</div>#}
+    {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>#}
+    {#<script type="text/javascript">#}
+        {#// Attach a submit handler to the form#}
+        {#$( "#emailQuote" ).submit(function( event ) {#}
+
+            {#// Stop form from submitting normally#}
+            {#event.preventDefault();#}
+
+{#//            $.ajaxSetup({#}
+{#//                headers: {#}
+{#//                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')#}
+{#//                }#}
+{#//            });#}
+
+            {#// Get some values from elements on the page:#}
+            {#var $form = $( this ),#}
+                {#email = $form.find( "input[name='email']" ).val(),#}
+                {#url = $form.attr( "action" );#}
+
+            {#// Send the data using post#}
+            {#var posting = $.post( url, { email: email, _token:token  } );#}
+
+            {#// Put the results in a div#}
+            {#posting.done(function( data ) {#}
+{#//                var content = $( data ).find( "#content" );#}
+{#//                $( "#result" ).empty().append( content );#}
+                {#console.log(data.success)#}
+            {#});#}
+        {#});#}
+    {#</script>#}
+
+    <script type="text/javascript">
+        function initMap() {
+            var uluru = {lat: -25.363, lng: 131.044};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: uluru
+            });
+            var marker = new google.maps.Marker({
+                position: uluru,
+                map: map
+            });
+        }
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqACoKPqvIrZ1EQp-njyExDg0oYaG_64o&callback=initMap">
+    </script>
 {% endblock %}

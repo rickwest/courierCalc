@@ -1,7 +1,45 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}AppBundle:Quote:index{% endblock %}
+{% block title %}Courier Calc - Your Quotes{% endblock %}
 
-{% block body %}
-<h1>Welcome to the Quote:index page</h1>
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Quotes</h4>
+                    <p class="category">Quotes generated in the last 30 days</p>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr><th>Id</th>
+                            <th>Customer Name</th>
+                            <th>Start</th>
+                            <th>Destination</th>
+                            <th>Via</th>
+                            <th>Cost</th>
+                            <th>Price</th>
+                            <th>Action</th>
+                        </tr></thead>
+                        <tbody>
+                        <tr>
+                            {% for quote in quotes %}
+                            <td>{{ quote.id }}</td>
+                            <td>{{ quote.customerName | default('') }}</td>
+                            <td>{{ quote.start.name }}</td>
+                            <td>{{ quote.destination.name }}</td>
+                            <td>{{ quote.via.name | default('') }}</td>
+                            <td>{{ quote.cost | number_format(2) }}</td>
+                            <td>{{ quote.price | number_format(2) }}</td>
+                            <td><a href="{{ path('quoteShow', {quote: quote.id}) }}" role="button" class="btn btn-success">View</a></td>
+                        </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

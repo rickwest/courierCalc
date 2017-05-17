@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: rick
- * Date: 31/03/2017
- * Time: 21:40
+ * Date: 16/05/17
+ * Time: 22:08
  */
 
 namespace AppBundle\Form\Model;
@@ -13,9 +13,9 @@ class QuoteFormModel {
 
 	protected $start;
 	protected $destination;
-	protected $via;
-	protected $feeScaleId;
-	protected $vehicleTypeId;
+ 	protected $via;
+ 	protected $feeScaleId;
+ 	protected $vehicleTypeId;
 
 	/**
 	 * @return mixed

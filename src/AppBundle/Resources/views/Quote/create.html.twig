@@ -22,7 +22,7 @@
 
                             <a id="toggleVia">Add Via Point <i class="fa fa-plus"></i></a>
 
-                            <div id="via">
+                            <div id="via" class="hidden">
                                 {{ form_row(form.via) }}
                             </div>
                         </div>
@@ -49,9 +49,9 @@
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAqACoKPqvIrZ1EQp-njyExDg0oYaG_64o&libraries=places"></script>
 
         <script type="text/javascript">
-            var startInput = document.getElementById('quote_start');
-            var destinationInput = document.getElementById('quote_destination');
-            var viaInput = document.getElementById('quote_via');
+            var startInput = document.getElementById('quote_start_name');
+            var destinationInput = document.getElementById('quote_destination_name');
+            var viaInput = document.getElementById('quote_via_name');
 
             startAutocomplete = new google.maps.places.Autocomplete(startInput);
             destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
