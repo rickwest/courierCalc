@@ -9,13 +9,16 @@
 namespace AppBundle\Form\Model;
 
 
-class QuoteFormModel {
+class Job {
 
+    protected $userId;
 	protected $start;
 	protected $destination;
  	protected $via;
  	protected $feeScaleId;
  	protected $vehicleTypeId;
+    protected $distance;
+    protected $duration;
 
 	/**
 	 * @return mixed
@@ -26,7 +29,7 @@ class QuoteFormModel {
 
 	/**
 	 * @param mixed $start
-	 * @return QuoteFormModel
+	 * @return Job
 	 */
 	public function setStart($start) {
 		$this->start = $start;
@@ -42,7 +45,7 @@ class QuoteFormModel {
 
 	/**
 	 * @param mixed $destination
-	 * @return QuoteFormModel
+	 * @return Job
 	 */
 	public function setDestination($destination) {
 		$this->destination = $destination;
@@ -58,7 +61,7 @@ class QuoteFormModel {
 
 	/**
 	 * @param mixed $via
-	 * @return QuoteFormModel
+	 * @return Job
 	 */
 	public function setVia($via) {
 		$this->via = $via;
@@ -74,7 +77,7 @@ class QuoteFormModel {
 
 	/**
 	 * @param mixed $feeScaleId
-	 * @return QuoteFormModel
+	 * @return Job
 	 */
 	public function setFeeScaleId($feeScaleId) {
 		$this->feeScaleId = $feeScaleId;
@@ -90,10 +93,60 @@ class QuoteFormModel {
 
 	/**
 	 * @param mixed $vehicleTypeId
-	 * @return QuoteFormModel
+	 * @return Job
 	 */
 	public function setVehicleTypeId($vehicleTypeId) {
 		$this->vehicleTypeId = $vehicleTypeId;
 		return $this;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getDistance() {
+        return $this->distance;
+    }
+
+    /**
+     * @param mixed $distance
+     * @return Job
+     */
+    public function setDistance($distance) {
+        $this->distance = $distance;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDuration() {
+        return $this->duration;
+    }
+
+    /**
+     * @param mixed $duration
+     * @return Job
+     */
+    public function setDuration($duration) {
+        $this->duration = $duration;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId() {
+        return $this->userId;
+    }
+
+    /**
+     * @param mixed $userId
+     * @return Job
+     */
+    public function setUserId($userId) {
+        $this->userId = $userId;
+        return $this;
+    }
+
+
 }

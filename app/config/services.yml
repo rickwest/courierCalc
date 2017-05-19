@@ -1,13 +1,14 @@
 services:
-    google_distance_generator:
+    app.distance_generator:
         class: AppBundle\DistanceGenerator\GoogleDistanceApi
         arguments: ['%google_api_key%']
 
-    quote_creator:
+    app.quote.quote_creator:
         class: AppBundle\Quote\QuoteCreator
+        arguments: ['@doctrine.orm.entity_manager', '@app.distance_generator' ]
 
-    app.form.type.quote:
-        class: AppBundle\Form\Type\QuoteType
+    app.form.type.job:
+        class: AppBundle\Form\Type\JobFormType
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - { name: form.type }

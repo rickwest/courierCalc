@@ -2,31 +2,33 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\AppBundle;
-use AppBundle\Entity\Fee;
 use AppBundle\Entity\Quote;
-use AppBundle\Form\Model\QuoteFormModel;
-use AppBundle\Form\Type\QuoteType;
+use AppBundle\Form\Model\Job;
+use AppBundle\Form\Type\JobFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Quote controller.
+ *
+ * @Route("quote")
+ */
 class QuoteController extends Controller
 {
+    public function getQuoteCreator() {
+        return $this->get('app.quote.quote_creator');
+	}
 
-	public function checkPermission() {
-		if(!$this->getUser()) {
-			throw new AccessDeniedException('You do not have permission to access this page');
-		}
-		return $this->getUser()->getId();
+    public function getDistanceGenerator() {
+        return $this->get('app.distance_generator');
 	}
 
 	/**
-     * @Route("/quotes", name="quotes")
+     * @Route("/", name="quote_index")
      */
     public function indexAction() {
-		$userId = $this->checkPermission();
+		$userId = $this->getUser()->getId();
 
 		$quotes = $this->getDoctrine()
 			->getRepository('AppBundle:Quote')
@@ -39,88 +41,45 @@ class QuoteController extends Controller
     }
 
     /**
-     * @Route("/quote/create", name="createQuote")
+     * @Route("/new", name="quote_new")
      */
     public function createAction(Request $request) {
-		$userId = $this->checkPermission();
+        $userId = $this->getUser()->getId();
 
-    	$formModel = new QuoteFormModel();
+        $form = $this->createForm(JobFormType::class, new Job(), ['userId' => $userId]);
 
-		$form = $this->createForm(QuoteType::class, $formModel, ['userId' => $userId]);
+        $form->handleRequest($request);
 
-		$form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $job = $form->getData();
+            $job->setUserId($userId);
 
-		if ($form->isSubmitted() && $form->isValid()) {
+            list ($distance, $duration) = $this->getDistanceGenerator()->getDistance(
+                $job->getStart(),
+                $job->getDestination(),
+                $job->getVia()
+            );
 
-			$formModel = $form->getData();
+            $job->setDistance($this->getQuoteCreator()->convertMetresToMiles($distance))
+                ->setDuration($duration)
+            ;
 
-			$start = $formModel->getStart();
-			$destination = $formModel->getDestination();
-			$via = $formModel->getVia();
+            /** @var Quote $quote */
+            $quote = $this->getQuoteCreator()->createQuote($job);
 
-			$vehicleTypeId = $formModel->getVehicleTypeId();
-			$feeScaleId = $formModel->getFeeScaleId();
+            return $this->redirectToRoute('quote_show', [
+                'quote' => $quote->getId()
+            ]);
+        }
 
-			list($route, $polyline) = $this->get('google_distance_generator')->getRouteDetails($start, $destination, $via);
-
-			$distance = $this->get('quote_creator')->convertMetresToMiles($route['distance']['value']);
-			$duration = $route['duration']['text'];
-
-			$feeScale = $this->getDoctrine()->getManager()
-				->getRepository('AppBundle:FeeScale')
-				->findOneBy(['id' => $formModel->getFeeScaleId()]);
-
-			$fees = $feeScale->getFees();
-
-			if (!$fees) {
-				//add flash message and redirect to show page;
-			}
-
-			$price = 0;
-			$cost = 0;
-
-			foreach ($fees as $fee) {
-				/** @var Fee $fee */
-				if($fee->getVehicleTypeId() === $vehicleTypeId) {
-					switch ($fee->getFeeTypeId()) {
-						case Quote::FEE_TYPE_PER_MILE:
-							$price += ($fee->getPrice() * $distance);
-							$cost += ($fee->getCost() * $distance);
-							break;
-					}
-				}
-			}
-
-			$quote = new Quote;
-			$quote
-				->setUserId($userId)
-				->setPrice($price)
-				->setCost($cost)
-				->setStart($start)
-				->setDestination($destination)
-				->setVehicleTypeId($vehicleTypeId)
-				->setVia($via)
-				->setDistance($distance)
-				->setDuration($duration)
-				->setFeeScaleId($feeScaleId);
-			;
-			$em = $this->getDoctrine()->getManager();
-			$em->persist($quote);
-			$em->flush();
-
-			return $this->redirectToRoute('quoteShow', [
-				'quote' => $quote->getId()
-			]);
-		}
-
-		//check to see whether user has any fee scales
-		$feeScales = $this->getDoctrine()
-			->getRepository('AppBundle:FeeScale')
-			->findByUserId($userId);
-
-		if (!$feeScales) {
-			return $this->addFlash('notice', 'You need to create a fee scale before you are able to generate a quote');
-		}
+//		//check to see whether user has any fee scales
+//		$feeScales = $this->getDoctrine()
+//			->getRepository('AppBundle:FeeScale')
+//			->findByUserId($userId);
+//
+//		if (!$feeScales) {
+//			return $this->addFlash('notice', 'You need to create a fee scale before you are able to generate a quote');
+//		}
 
 		return $this->render('AppBundle:Quote:create.html.twig', [
 			'form' => $form->createView()
@@ -129,17 +88,17 @@ class QuoteController extends Controller
     }
 
     /**
-     * @Route("/quote/show/{quote}", name="quoteShow")
+     * @Route("/show/{quote}", name="quote_show")
      */
     public function showAction(Quote $quote) {
-		$userId = $this->checkPermission();
+        $userId = $this->getUser()->getId();
 
     	//need to check that the logged in user is the owner of the quote
 		if ($quote->getUserId() !== $userId) {
 			//add flash and redirect?
 		}
 
-		$vehicleType = array_search($quote->getVehicleTypeId(), QuoteType::getVehicleTypeChoices());
+		$vehicleType = array_search($quote->getVehicleTypeId(), JobFormType::getVehicleTypeChoices());
 
 		$feeScaleId = $quote->getFeeScaleId();
 

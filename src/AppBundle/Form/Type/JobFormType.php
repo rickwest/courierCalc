@@ -10,14 +10,14 @@ namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\FeeScale;
 use AppBundle\Entity\Quote;
-use AppBundle\Form\Model\QuoteFormModel;
+use AppBundle\Form\Model\Job;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class QuoteType extends AbstractType {
+class JobFormType extends AbstractType {
 
 	/** @var EntityManager $em */
 	protected $em;
@@ -46,7 +46,7 @@ class QuoteType extends AbstractType {
 
     public function configureOptions(OptionsResolver $resolver) {
         $resolver->setDefaults([
-            'data_class' => QuoteFormModel::class,
+            'data_class' => Job::class,
 			'userId' => null
         ]);
     }
