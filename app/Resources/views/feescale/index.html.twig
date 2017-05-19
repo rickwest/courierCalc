@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">FeeScales</h4>
+                    <p class="category">Your company fee scales</p>
+                </div>
+                <div class="content table-responsive table-full-width">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Userid</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for feeScale in feeScales %}
+                            <tr>
+                                <td><a href="{{ path('feescale_show', { 'id': feeScale.id }) }}">{{ feeScale.id }}</a></td>
+                                <td>{{ feeScale.name }}</td>
+                                <td>{{ feeScale.userId }}</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ path('feescale_show', { 'id': feeScale.id }) }}">show</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('feescale_edit', { 'id': feeScale.id }) }}">edit</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <ul>
+                    <li>
+                        <a href="{{ path('feescale_new') }}">Create a new feeScale</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
