@@ -57,22 +57,22 @@
             destinationAutocomplete = new google.maps.places.Autocomplete(destinationInput);
             viaAutocomplete = new google.maps.places.Autocomplete(viaInput);
 
-            startAutocomplete.addListener('place_changed', function(){
+            startAutocomplete.addListener('place_changed', function() {
                 var startLocation =  startAutocomplete.getPlace();
-                var startLat = startLocation.geometry.location.lat();
-                var startlon = startLocation.geometry.location.lng();
+                document.getElementById('job_form_start_lat').value = startLocation.geometry.location.lat();
+                document.getElementById('job_form_start_lon').value = startLocation.geometry.location.lng();
             });
 
-            destinationAutocomplete.addListener('place_changed', function(){
-                var finishLocation =  destinationAutocomplete.getPlace();
-                var finishLat = finishLocation.geometry.location.lat();
-                var finishlon = finishLocation.geometry.location.lng();
+            destinationAutocomplete.addListener('place_changed', function() {
+                var destinationLocation =  destinationAutocomplete.getPlace();
+                document.getElementById('job_form_destination_lat').value = destinationLocation.geometry.location.lat();
+                document.getElementById('job_form_destination_lon').value = destinationLocation.geometry.location.lng();
             });
 
             viaAutocomplete.addListener('place_changed', function(){
                 var viaLocation =  viaAutocomplete.getPlace();
-                var viaLat = viaLocation.geometry.location.lat();
-                var vialon = finishLocation.geometry.location.lng();
+                document.getElementById('job_form_via_lat').value = viaLocation.geometry.location.lat();
+                document.getElementById('job_form_via_lon').value = viaLocation.geometry.location.lng();
             });
         </script>
 
